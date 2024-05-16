@@ -49,7 +49,7 @@ export default function Dropdown({ setDropdown, position, data, setData }: Dropd
   );
 
   function handleGuess(char: CharacterData) {
-    if (char.x - position.x <= 40 && char.y - position.y <= 40) {
+    if (Math.abs(char.x - position.x) <= 40 && Math.abs(char.y - position.y) <= 40) {
       console.log('You got it');
       setData(data.filter((c) => c.name !== char.name));
       setDropdown(false);
