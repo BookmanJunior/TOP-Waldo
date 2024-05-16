@@ -15,7 +15,7 @@ export default function Dropdown({ setDropdown, position, data, setData }: Dropd
   const [optionsOpen, setOptionsOpen] = useState(false);
   return (
     <div
-      className="absolute flex translate-x-[-40px] translate-y-[-30px] gap-4"
+      className="absolute flex translate-x-[-40px] translate-y-[-30px] flex-wrap gap-4"
       style={{
         top: `${position.y}px`,
         left: `${position.x}px`
@@ -30,15 +30,22 @@ export default function Dropdown({ setDropdown, position, data, setData }: Dropd
       <div>
         <button
           onClick={() => setOptionsOpen(!optionsOpen)}
-          className={`flex items-center gap-4 rounded-sm bg-white px-4 py-1 after:inline-block ${optionsOpen ? 'after:rotate-45' : 'after:rotate-[-135deg]'} after:border-b-[2px] after:border-r-[2px] after:border-black after:p-[3px] after:transition-[transform]`}>
+          className={` mb-2 flex items-center gap-4 rounded-sm bg-white px-4 py-1 after:inline-block ${optionsOpen ? 'after:rotate-45' : 'after:rotate-[-135deg]'} after:border-b-[2px] after:border-r-[2px] after:border-black after:p-[3px] after:transition-[transform]`}>
           Who is it?
         </button>
         {optionsOpen && (
-          <ul className="bg-white">
+          <ul className="rounded-[2px] bg-white">
             {data.map((char, i) => (
               <li key={i} className="hover:bg-gray-400">
-                <button onClick={() => handleGuess(char)} className="w-full px-4 py-1 text-start">
+                <button
+                  onClick={() => handleGuess(char)}
+                  className="flex w-full flex-wrap items-center gap-1 px-4 py-1 text-start">
                   {char.name}
+                  <img
+                    src={char.img}
+                    alt={char.name}
+                    className="-order-last aspect-square w-[75px] object-cover"
+                  />
                 </button>
               </li>
             ))}
