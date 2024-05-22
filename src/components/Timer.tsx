@@ -31,8 +31,8 @@ export default function Timer({ setFinalTime, isGameOver }: TimerProps) {
   }, [isRunning, isGameOver]);
 
   return (
-    <div className="pointer-events-none fixed bottom-2 left-0 right-0 flex justify-center rounded-sm">
-      <p className=" bg-pink-100 p-2">{FormatTime(timeElapsed)}</p>
+    <div className="pointer-events-none fixed bottom-2 left-0 right-0 flex justify-center">
+      <p className=" rounded-md bg-pink-100 bg-opacity-90 p-2">{FormatTime(timeElapsed)}</p>
     </div>
   );
 }
