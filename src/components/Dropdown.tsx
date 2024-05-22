@@ -1,24 +1,30 @@
 import { useState } from 'react';
 import { CharacterData } from '../types/CharacterData';
 
+type Position = { x: number; y: number };
+
 type DropdownProps = {
   setDropdown: (dropdown: boolean) => void;
-  position: {
-    x: number;
-    y: number;
-  };
+  position: Position;
+  dropdownPosition: Position;
   data: CharacterData[];
   setData: (arg: CharacterData[]) => void;
 };
 
-export default function Dropdown({ setDropdown, position, data, setData }: DropdownProps) {
+export default function Dropdown({
+  setDropdown,
+  position,
+  dropdownPosition,
+  data,
+  setData
+}: DropdownProps) {
   const [optionsOpen, setOptionsOpen] = useState(false);
   return (
     <div
-      className="absolute flex translate-x-[-40px] translate-y-[-30px] flex-wrap gap-4"
+      className="absolute flex translate-x-[-20px] translate-y-[-20px]  flex-wrap gap-4"
       style={{
-        top: `${position.y}px`,
-        left: `${position.x}px`
+        top: `${dropdownPosition.y}%`,
+        left: `${dropdownPosition.x}%`
       }}>
       <div
         onClick={(e) => {
@@ -26,7 +32,7 @@ export default function Dropdown({ setDropdown, position, data, setData }: Dropd
           setDropdown(false);
           setOptionsOpen(!optionsOpen);
         }}
-        className="h-[75px] w-[75px] cursor-pointer rounded-[50%] bg-red-800 bg-opacity-30 outline-dashed outline-4 outline-red-400"></div>
+        className="h-[50px] w-[50px] cursor-pointer rounded-[50%] bg-red-800 bg-opacity-30 outline-dashed outline-4 outline-red-400"></div>
       <div>
         <button
           onClick={() => setOptionsOpen(!optionsOpen)}
