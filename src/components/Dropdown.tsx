@@ -5,18 +5,16 @@ type Position = { x: number; y: number };
 
 type DropdownProps = {
   setDropdown: (dropdown: boolean) => void;
-  position: Position;
   dropdownPosition: Position;
   data: CharacterData[];
-  setData: (arg: CharacterData[]) => void;
+  handleGuess: (arg0: CharacterData) => void;
 };
 
 export default function Dropdown({
   setDropdown,
-  position,
   dropdownPosition,
   data,
-  setData
+  handleGuess
 }: DropdownProps) {
   const [optionsOpen, setOptionsOpen] = useState(false);
   return (
@@ -60,15 +58,4 @@ export default function Dropdown({
       </div>
     </div>
   );
-
-  function handleGuess(char: CharacterData) {
-    if (Math.abs(char.x - position.x) <= 40 && Math.abs(char.y - position.y) <= 40) {
-      console.log('You got it');
-      setData(data.filter((c) => c.name !== char.name));
-      setDropdown(false);
-    } else {
-      console.log('Wrong');
-      setDropdown(false);
-    }
-  }
 }
