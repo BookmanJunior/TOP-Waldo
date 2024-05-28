@@ -23,8 +23,8 @@ export default function Dropdown({
     <div
       className="absolute flex translate-x-[-20px] translate-y-[-20px]  flex-wrap gap-4"
       style={{
-        top: `${dropdownPosition.y}%`,
-        left: `${dropdownPosition.x}%`
+        top: `${dropdownPosition.y}px`,
+        left: `${dropdownPosition.x}px`
       }}>
       <div
         onClick={(e) => {
