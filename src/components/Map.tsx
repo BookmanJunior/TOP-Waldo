@@ -3,34 +3,38 @@ import Dropdown from './Dropdown';
 import Timer from './Timer';
 import { Modal } from './Modal';
 import { CharacterData } from '../types/CharacterData';
+import FetchData from './FetchData';
+import { Map as MapProps } from '../types/Map';
+import { useParams } from 'react-router-dom';
 
-type MapProps = {
-  mapImage: string;
-  data: CharacterData[];
-};
-
-export default function Map({ mapImage, data }: MapProps) {
+export default function Map() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dropdown, setDropdown] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0 });
   const [finalTime, setFinalTime] = useState(0);
-  const [mapData, setMapdata] = useState(data);
+  const { map_id } = useParams();
+  const { state, data, error, setData } = FetchData<MapProps>(
+    `http://localhost:3000/maps/${map_id}`
+  );
 
-  const isGameOver = !mapData.length;
+  if (state === 'loading') return <div>Loading...</div>;
+
+  if (state === 'error') return <div>{error.message}</div>;
+
+  const isGameOver = !data.map_data.length;
 
   return (
     <main className="relative">
       <img
         className="w-full cursor-pointer object-fill"
         onClick={handleMapClick}
-        src={mapImage}></img>
+        src={data.img}></img>
       {dropdown && (
         <Dropdown
-          position={position}
           setDropdown={setDropdown}
           dropdownPosition={dropdownPosition}
-          data={mapData}
-          setData={setMapdata}
+          data={data.map_data}
+          handleGuess={handleGuess}
         />
       )}
       <Modal isOpen={isGameOver} finalTime={finalTime} />
@@ -39,7 +43,7 @@ export default function Map({ mapImage, data }: MapProps) {
   );
 
   function handleMapClick(e: React.MouseEvent) {
-    if (mapData.length) return;
+    if (!data?.map_data.length) return;
 
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.nativeEvent.offsetX;
@@ -52,6 +56,18 @@ export default function Map({ mapImage, data }: MapProps) {
 
     if (!dropdown) {
       setDropdown(true);
+    }
+  }
+
+  function handleGuess(char: CharacterData) {
+    if (Math.abs(char.x - position.x) <= 40 && Math.abs(char.y - position.y) <= 40) {
+      if (data) {
+        const filteredData = data.map_data.filter((c) => c.name !== char.name);
+        setData({ ...data, map_data: filteredData });
+      }
+      setDropdown(false);
+    } else {
+      setDropdown(false);
     }
   }
 }
