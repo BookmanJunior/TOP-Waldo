@@ -37,7 +37,7 @@ export default function Map() {
           handleGuess={handleGuess}
         />
       )}
-      <Modal isOpen={isGameOver} finalTime={finalTime} />
+      <Modal isOpen={isGameOver} finalTime={finalTime} map_id={data.id} />
       <Timer setFinalTime={setFinalTime} isGameOver={isGameOver} />
     </main>
   );
