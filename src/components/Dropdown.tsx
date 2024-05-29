@@ -44,7 +44,9 @@ function DropdownOptions({ data, handleGuess }: DropdownOptionsProps) {
     <div>
       <button
         onClick={() => setOptionsOpen(!optionsOpen)}
-        className={` mb-2 flex items-center gap-4 rounded-sm bg-white px-4 py-1 after:inline-block ${optionsOpen ? 'after:rotate-45' : 'after:rotate-[-135deg]'} after:border-b-[2px] after:border-r-[2px] after:border-black after:p-[3px] after:transition-[transform]`}>
+        className={` mb-2 flex items-center gap-4 rounded-sm bg-white px-4 py-1 after:inline-block 
+        ${optionsOpen ? 'after:rotate-45' : 'after:rotate-[-135deg]'} after:border-b-[2px] after:border-r-[2px]
+         after:border-black after:p-[3px] after:transition-[transform]`}>
         Who is it?
       </button>
       {optionsOpen && (
