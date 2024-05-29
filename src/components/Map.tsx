@@ -60,7 +60,7 @@ export default function Map() {
   }
 
   function handleGuess(char: CharacterData) {
-    if (Math.abs(char.x - position.x) <= 40 && Math.abs(char.y - position.y) <= 40) {
+    if (Math.abs(char.x - position.x) <= 5 && Math.abs(char.y - position.y) <= 5) {
       if (data) {
         const filteredData = data.map_data.filter((c) => c.name !== char.name);
         setData({ ...data, map_data: filteredData });
