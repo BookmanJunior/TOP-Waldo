@@ -34,7 +34,7 @@ export default function Map() {
           <DropdownOptions data={data.map_data} handleGuess={handleGuess} />
         </Dropdown>
       )}
-      <Modal isOpen={isGameOver} finalTime={finalTime} map_id={data.id} />
+      {isGameOver && <Modal isOpen={isGameOver} finalTime={finalTime} map_id={data.map_id} />}
       <Timer setFinalTime={setFinalTime} isGameOver={isGameOver} />
     </main>
   );
