@@ -27,6 +27,8 @@ export function Modal({ isOpen, finalTime, map_id }: ModalProps) {
     }
   }, [isOpen]);
 
+  const didMakeTop10 = data && data.length && data[data.length - 1].time > finalTime;
+
   return createPortal(
     <dialog
       ref={modalRef}
@@ -35,7 +37,11 @@ export function Modal({ isOpen, finalTime, map_id }: ModalProps) {
       <p>
         Your final time is: <span className="font-bold">{FormatTime(finalTime)}</span>
       </p>
-      <ModalForm finalTime={finalTime} map_id={map_id} setData={setData} />
+      {didMakeTop10 ? (
+        <ModalForm finalTime={finalTime} map_id={map_id} setData={setData} />
+      ) : (
+        <p>Can you make it to the top 10?</p>
+      )}
       <div className="px-4">
         {state === 'loading' ? (
           <p>Loading Leaderboard</p>
