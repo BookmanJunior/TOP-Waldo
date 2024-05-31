@@ -16,7 +16,7 @@ type ModalProps = {
 export function Modal({ isOpen, finalTime, map_id }: ModalProps) {
   const modalRef = useRef<HTMLDialogElement>(null);
   const { state, data, error, setData } = FetchData<LeaderboardEntries[]>(
-    `${getUrl()}/leaderboard`
+    `${getUrl()}/leaderboard/${map_id}`
   );
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export function Modal({ isOpen, finalTime, map_id }: ModalProps) {
     }
   }, [isOpen]);
 
-  const didMakeTop10 = data && data.length && data[data.length - 1].time > finalTime;
+  const didMakeTop10 = !data?.length || data.length < 10 || data[data.length - 1].time > finalTime;
 
   return createPortal(
     <dialog
