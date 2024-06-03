@@ -11,9 +11,10 @@ type ModalProps = {
   isOpen: boolean;
   finalTime: number;
   map_id: number;
+  handleRestart: () => void;
 };
 
-export function Modal({ isOpen, finalTime, map_id }: ModalProps) {
+export function Modal({ isOpen, finalTime, map_id, handleRestart }: ModalProps) {
   const modalRef = useRef<HTMLDialogElement>(null);
   const { state, data, error, setData } = FetchData<LeaderboardEntries[]>(
     `${getUrl()}/leaderboard/${map_id}`
@@ -52,7 +53,9 @@ export function Modal({ isOpen, finalTime, map_id }: ModalProps) {
         )}
       </div>
       <div className="flex justify-center gap-2 border-t pt-4 text-sm">
-        <button className="rounded-sm px-3 py-1 outline outline-1 outline-neutral-400">
+        <button
+          onClick={handleRestart}
+          className="rounded-sm px-3 py-1 outline outline-1 outline-neutral-400">
           Play Again
         </button>
         <Link to={'/'} className="rounded-sm px-3 py-1 outline outline-1 outline-neutral-400">
