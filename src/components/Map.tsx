@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Dropdown from './Dropdown';
 import DropdownOptions from './DropdownOptions';
 import Timer from './Timer';
@@ -13,9 +13,10 @@ export default function Map() {
   const [dropdown, setDropdown] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0 });
   const [finalTime, setFinalTime] = useState(0);
+  const mainRef = useRef<HTMLDivElement>(null);
   const { map_id } = useParams();
   const url = getUrl();
-  const { state, data, error, setData } = FetchData<MapProps>(`${url}/maps/${map_id}`);
+  const { state, data, error, setData, refetchData } = FetchData<MapProps>(`${url}/maps/${map_id}`);
 
   if (state === 'loading') return <div>Loading...</div>;
 
@@ -24,7 +25,7 @@ export default function Map() {
   const isGameOver = !data.map_data.length;
 
   return (
-    <main className="relative">
+    <main ref={mainRef} className="relative">
       <img
         className="w-full cursor-pointer object-fill"
         onClick={handleMapClick}
@@ -34,7 +35,14 @@ export default function Map() {
           <DropdownOptions data={data.map_data} handleGuess={handleGuess} />
         </Dropdown>
       )}
-      {isGameOver && <Modal isOpen={isGameOver} finalTime={finalTime} map_id={data.map_id} />}
+      {isGameOver && (
+        <Modal
+          isOpen={isGameOver}
+          finalTime={finalTime}
+          map_id={data.map_id}
+          handleRestart={handleRestart}
+        />
+      )}
       <Timer setFinalTime={setFinalTime} isGameOver={isGameOver} />
     </main>
   );
@@ -79,5 +87,11 @@ export default function Map() {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  function handleRestart() {
+    setFinalTime(0);
+    refetchData();
+    mainRef.current?.scrollIntoView({ behavior: 'smooth' });
   }
 }
