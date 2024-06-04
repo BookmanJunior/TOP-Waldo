@@ -9,12 +9,19 @@ import { useParams } from 'react-router-dom';
 import getUrl from '../helpers/GetUrl';
 import FoundCharactersMark from './FoundCharactersMark';
 import { Coordinates } from '../types/Coordinates';
+import Footer from './Footer';
+import fail from '../assets/fail.mp3';
+import success from '../assets/success.mp3';
+
+const failAudio = new Audio(fail);
+const successAudio = new Audio(success);
 
 export default function Map() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dropdown, setDropdown] = useState(false);
   const [finalTime, setFinalTime] = useState(0);
   const [foundPositions, setFoundPositions] = useState<Coordinates[]>([]);
+  const [soundOn, setSoundOn] = useState(true);
   const mainRef = useRef<HTMLDivElement>(null);
   const { map_id } = useParams();
   const url = getUrl();
@@ -45,7 +52,9 @@ export default function Map() {
           handleRestart={handleRestart}
         />
       )}
-      <Timer setFinalTime={setFinalTime} isGameOver={isGameOver} />
+      <Footer soundOn={soundOn} modifySound={modifyAudio}>
+        <Timer setFinalTime={setFinalTime} isGameOver={isGameOver} />
+      </Footer>
       {foundPositions.length > 0 && <FoundCharactersMark foundPositions={foundPositions} />}
     </main>
   );
@@ -71,6 +80,10 @@ export default function Map() {
     e.preventDefault();
     setDropdown(false);
 
+    if (!successAudio.paused || !failAudio.paused) {
+      restartAudio();
+    }
+
     try {
       const res = await fetch(`${url}/marker/verify`, {
         mode: 'cors',
@@ -80,6 +93,7 @@ export default function Map() {
       });
 
       if (res.status >= 400) {
+        failAudio.play();
         return;
       }
 
@@ -87,6 +101,7 @@ export default function Map() {
         const filteredData = data.map_data.filter((c) => c.name !== charName);
         setData({ ...data, map_data: filteredData });
         setFoundPositions([...foundPositions, position]);
+        successAudio.play();
       }
     } catch (error) {
       console.log(error);
@@ -98,5 +113,28 @@ export default function Map() {
     setFoundPositions([]);
     refetchData();
     mainRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function restartAudio() {
+    successAudio.pause();
+    successAudio.currentTime = 0;
+    failAudio.pause();
+    failAudio.currentTime = 0;
+  }
+
+  function modifyAudio() {
+    const isSound = !soundOn;
+    setSoundOn(isSound);
+
+    if (isSound) {
+      successAudio.volume = 1;
+      failAudio.volume = 1;
+      restartAudio();
+      return;
+    }
+
+    successAudio.volume = 0;
+    failAudio.volume = 0;
+    restartAudio();
   }
 }
