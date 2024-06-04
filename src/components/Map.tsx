@@ -25,14 +25,14 @@ export default function Map() {
   const isGameOver = !data.map_data.length;
 
   return (
-    <main ref={mainRef} className="relative">
+    <main ref={mainRef} className="relative mx-auto my-auto max-w-[1200px]">
       <img
         className="w-full cursor-pointer object-fill"
         onClick={handleMapClick}
         src={data.img}></img>
       {dropdown && (
         <Dropdown setDropdown={setDropdown} dropdownPosition={dropdownPosition}>
-          <DropdownOptions data={data.map_data} handleGuess={handleGuess} />
+          <DropdownOptions data={data.map_data} handleGuess={handleGuess} position={position} />
         </Dropdown>
       )}
       {isGameOver && (
