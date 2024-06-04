@@ -10,6 +10,6 @@ export default function FoundCharactersMark({ foundPositions }: FoundCharactersM
     <img
       style={{ top: `${position.y}%`, left: `${position.x}%` }}
       src={Checkmark}
-      className="z-2 pointer-events-none absolute w-[24px]"></img>
+      className="pointer-events-none absolute w-[24px]"></img>
   ));
 }
