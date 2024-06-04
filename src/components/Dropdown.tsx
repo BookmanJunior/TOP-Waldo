@@ -10,10 +10,10 @@ export default function Dropdown({ setDropdown, dropdownPosition, children }: Dr
   return (
     <div
       className="absolute flex translate-x-[-10px] translate-y-[-10px] flex-wrap gap-4 
-      md-[800px]:translate-x-[-20px] md-[800px]:translate-y-[-20px]"
+      "
       style={{
-        top: `${dropdownPosition.y}px`,
-        left: `${dropdownPosition.x}px`
+        top: `${dropdownPosition.y}%`,
+        left: `${dropdownPosition.x}%`
       }}>
       <div
         onClick={(e) => {
