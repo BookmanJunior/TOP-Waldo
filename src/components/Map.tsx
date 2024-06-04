@@ -7,12 +7,14 @@ import FetchData from './FetchData';
 import { Map as MapProps } from '../types/Map';
 import { useParams } from 'react-router-dom';
 import getUrl from '../helpers/GetUrl';
+import FoundCharactersMark from './FoundCharactersMark';
+import { Coordinates } from '../types/Coordinates';
 
 export default function Map() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dropdown, setDropdown] = useState(false);
-  const [dropdownPosition, setDropdownPosition] = useState({ x: 0, y: 0 });
   const [finalTime, setFinalTime] = useState(0);
+  const [foundPositions, setFoundPositions] = useState<Coordinates[]>([]);
   const mainRef = useRef<HTMLDivElement>(null);
   const { map_id } = useParams();
   const url = getUrl();
@@ -31,7 +33,7 @@ export default function Map() {
         onClick={handleMapClick}
         src={data.img}></img>
       {dropdown && (
-        <Dropdown setDropdown={setDropdown} dropdownPosition={dropdownPosition}>
+        <Dropdown setDropdown={setDropdown} dropdownPosition={position}>
           <DropdownOptions data={data.map_data} handleGuess={handleGuess} position={position} />
         </Dropdown>
       )}
@@ -44,6 +46,7 @@ export default function Map() {
         />
       )}
       <Timer setFinalTime={setFinalTime} isGameOver={isGameOver} />
+      {foundPositions.length > 0 && <FoundCharactersMark foundPositions={foundPositions} />}
     </main>
   );
 
@@ -53,11 +56,11 @@ export default function Map() {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.nativeEvent.offsetX;
     const y = e.nativeEvent.offsetY;
+
     setPosition({
       x: Math.floor((x / rect.width) * 100),
-      y: Math.floor((y / rect.width) * 100)
+      y: Math.floor((y / rect.height) * 100)
     });
-    setDropdownPosition({ x, y });
 
     if (!dropdown) {
       setDropdown(true);
@@ -83,6 +86,7 @@ export default function Map() {
       if (data) {
         const filteredData = data.map_data.filter((c) => c.name !== charName);
         setData({ ...data, map_data: filteredData });
+        setFoundPositions([...foundPositions, position]);
       }
     } catch (error) {
       console.log(error);
@@ -91,6 +95,7 @@ export default function Map() {
 
   function handleRestart() {
     setFinalTime(0);
+    setFoundPositions([]);
     refetchData();
     mainRef.current?.scrollIntoView({ behavior: 'smooth' });
   }
