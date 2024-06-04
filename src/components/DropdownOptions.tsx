@@ -26,12 +26,12 @@ export default function DropdownOptions({ data, handleGuess }: DropdownOptionsPr
               <li key={i} className="hover:bg-gray-400">
                 <button
                   onClick={() => setGuessedCharacter(char.name)}
-                  className="flex w-full flex-wrap items-center gap-1 px-4 py-1 text-start">
+                  className="flex h-[50px] w-full flex-wrap items-center gap-1 px-4 py-1 text-start md-[800px]:h-[75px]">
                   {char.name}
                   <img
                     src={char.img}
                     alt={char.name}
-                    className="-order-last aspect-square w-[75px] object-cover"
+                    className="-order-last aspect-square max-h-full max-w-full object-cover md-[800px]:h-[75px]"
                   />
                 </button>
               </li>
