@@ -4,11 +4,14 @@ import { CharacterData } from '../types/CharacterData';
 type DropdownOptionsProps = {
   data: CharacterData[];
   handleGuess: (e: React.FormEvent, charName: string) => void;
+  position: { x: number; y: number };
 };
 
-export default function DropdownOptions({ data, handleGuess }: DropdownOptionsProps) {
+export default function DropdownOptions({ data, handleGuess, position }: DropdownOptionsProps) {
   const [optionsOpen, setOptionsOpen] = useState(false);
   const [guessedCharacter, setGuessedCharacter] = useState('');
+
+  const isOutOfBoundY = position.y > 130;
 
   return (
     <div className="relative">
@@ -22,7 +25,7 @@ export default function DropdownOptions({ data, handleGuess }: DropdownOptionsPr
       {optionsOpen && (
         <form
           onSubmit={(e) => handleGuess(e, guessedCharacter)}
-          className="absolute bottom-[50px] w-max">
+          className={`absolute w-max ${isOutOfBoundY ? 'bottom-[55px]' : ''}`}>
           <ul className="rounded-[2px] bg-white">
             {data.map((char, i) => (
               <li key={i} className="hover:bg-gray-400">
