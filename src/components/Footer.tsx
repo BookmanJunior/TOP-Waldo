@@ -11,8 +11,8 @@ interface FooterProps {
 
 export default function Footer({ children, soundOn, modifySound }: FooterProps) {
   return (
-    <footer className="pointer-events-none fixed bottom-0 grid w-[min(1200px,100%)] grid-cols-2 items-center bg-pink-100 bg-opacity-70 p-2">
-      <div className="flex  gap-4 [&>*]:pointer-events-auto [&>*]:w-[24px]">
+    <footer className="z-5 pointer-events-none fixed bottom-0 grid w-[min(1200px,100%)] grid-cols-2 items-center bg-pink-100 bg-opacity-70 p-2">
+      <div className="flex gap-4 [&>*]:pointer-events-auto [&>*]:w-[24px]">
         <Link to="/" className="block">
           <img src={Home} alt="Home" className="max-w-ful max-h-full" />
         </Link>
