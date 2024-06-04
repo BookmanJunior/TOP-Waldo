@@ -39,9 +39,5 @@ export default function Timer({ setFinalTime, isGameOver }: TimerProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isRunning]);
 
-  return (
-    <div className="pointer-events-none fixed bottom-2 left-0 right-0 flex justify-center">
-      <p className=" rounded-md bg-pink-100 bg-opacity-90 p-2">{FormatTime(time)}</p>
-    </div>
-  );
+  return <div className=" rounded-md font-bold">{FormatTime(time)}</div>;
 }
