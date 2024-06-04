@@ -9,7 +9,7 @@ type DropdownProps = {
 export default function Dropdown({ setDropdown, dropdownPosition, children }: DropdownProps) {
   return (
     <div
-      className="absolute flex translate-x-[-10px] translate-y-[-10px] flex-wrap gap-4 
+      className="absolute z-50 flex translate-x-[-10px] translate-y-[-10px] flex-wrap gap-4 
       "
       style={{
         top: `${dropdownPosition.y}%`,
