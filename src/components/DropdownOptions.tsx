@@ -11,7 +11,7 @@ export default function DropdownOptions({ data, handleGuess }: DropdownOptionsPr
   const [guessedCharacter, setGuessedCharacter] = useState('');
 
   return (
-    <div>
+    <div className="relative">
       <button
         onClick={() => setOptionsOpen(!optionsOpen)}
         className={` mb-2 flex items-center gap-4 rounded-sm bg-white px-4 py-1 after:inline-block 
@@ -20,13 +20,15 @@ export default function DropdownOptions({ data, handleGuess }: DropdownOptionsPr
         Who is it?
       </button>
       {optionsOpen && (
-        <form onSubmit={(e) => handleGuess(e, guessedCharacter)}>
+        <form
+          onSubmit={(e) => handleGuess(e, guessedCharacter)}
+          className="absolute bottom-[50px] w-max">
           <ul className="rounded-[2px] bg-white">
             {data.map((char, i) => (
               <li key={i} className="hover:bg-gray-400">
                 <button
                   onClick={() => setGuessedCharacter(char.name)}
-                  className="flex h-[50px] w-full flex-wrap items-center gap-1 px-4 py-1 text-start md-[800px]:h-[75px]">
+                  className="flex h-[50px] w-full items-center gap-1 px-4 py-1 text-start md-[800px]:h-[75px]">
                   {char.name}
                   <img
                     src={char.img}
