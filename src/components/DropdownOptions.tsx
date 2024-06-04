@@ -11,7 +11,7 @@ export default function DropdownOptions({ data, handleGuess, position }: Dropdow
   const [optionsOpen, setOptionsOpen] = useState(false);
   const [guessedCharacter, setGuessedCharacter] = useState('');
 
-  const isOutOfBoundY = position.y > 130;
+  const isOutOfBoundY = position.y > 80;
 
   return (
     <div className="relative">
@@ -25,7 +25,7 @@ export default function DropdownOptions({ data, handleGuess, position }: Dropdow
       {optionsOpen && (
         <form
           onSubmit={(e) => handleGuess(e, guessedCharacter)}
-          className={`absolute w-max ${isOutOfBoundY ? 'bottom-[55px]' : ''}`}>
+          className={`absolute z-50 w-max ${isOutOfBoundY ? 'bottom-[55px]' : ''}`}>
           <ul className="rounded-[2px] bg-white">
             {data.map((char, i) => (
               <li key={i} className="hover:bg-gray-400">
