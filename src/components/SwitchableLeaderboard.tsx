@@ -4,13 +4,12 @@ import { useRootData } from '../router/Root';
 import getUrl from '../helpers/GetUrl';
 import { LeaderboardEntries } from '../types/LeaderboardEntries';
 import FetchData from './FetchData';
+import Spinner from './Spinner';
 
 export default function SwitchableLeaderboard() {
   const [currentLeaderboard, setCurrentLeaderboard] = useState(1);
   const { state, data, error } = FetchData<LeaderboardEntries[]>(`${getUrl()}/leaderboard`);
   const { mapData } = useRootData();
-
-  if (state === 'loading') return <div>Loading</div>;
 
   if (state === 'error') return <div>{error.message}</div>;
 
@@ -22,7 +21,7 @@ export default function SwitchableLeaderboard() {
     });
 
   return (
-    <div className="mx-auto max-w-[400px]">
+    <div className="mx-auto flex max-w-[400px] flex-col gap-4">
       <div className="buttons mt-4 bg-black text-white">
         <h2 className="py-1 text-center text-[1.3rem] font-bold">Leaderboard</h2>
         {mapData.map((item) => (
@@ -42,7 +41,11 @@ export default function SwitchableLeaderboard() {
           </button>
         ))}
       </div>
-      {data && <Leaderboard leaderboardData={leaderboardToDisplay} showCaption={false} />}
+      {state === 'loading' ? (
+        <Spinner />
+      ) : (
+        <Leaderboard leaderboardData={leaderboardToDisplay} showCaption={false} />
+      )}
     </div>
   );
 }
