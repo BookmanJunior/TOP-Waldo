@@ -2,12 +2,12 @@ import FormatTime from '../helpers/FormatTime';
 import { LeaderboardEntries } from '../types/LeaderboardEntries';
 
 interface LeaderboardProps {
-  leaderboardData: LeaderboardEntries[];
+  leaderboardData: LeaderboardEntries[] | undefined;
   showCaption?: boolean;
 }
 
 export function Leaderboard({ leaderboardData, showCaption = true }: LeaderboardProps) {
-  if (!leaderboardData.length) return <div>Leaderboard has no entries</div>;
+  if (!leaderboardData?.length) return <div className="text-center">Leaderboard is empty</div>;
 
   return (
     <table className="w-full text-center">
@@ -24,7 +24,7 @@ export function Leaderboard({ leaderboardData, showCaption = true }: Leaderboard
         </tr>
       </thead>
       <tbody>
-        {leaderboardData.map((entry, i) => (
+        {leaderboardData?.map((entry, i) => (
           <tr key={i} className="border-b last:border-0 [&>*]:py-1">
             <th scope="row">{i + 1}</th>
             <td>{entry.name}</td>
