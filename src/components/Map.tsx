@@ -12,6 +12,7 @@ import { Coordinates } from '../types/Coordinates';
 import Footer from './Footer';
 import fail from '../assets/fail.mp3';
 import success from '../assets/success.mp3';
+import Spinner from './Spinner';
 
 const failAudio = new Audio(fail);
 const successAudio = new Audio(success);
@@ -27,14 +28,14 @@ export default function Map() {
   const url = getUrl();
   const { state, data, error, setData, refetchData } = FetchData<MapProps>(`${url}/maps/${map_id}`);
 
-  if (state === 'loading') return <div>Loading...</div>;
+  if (state === 'loading') return <Spinner />;
 
   if (state === 'error') return <div>{error.message}</div>;
 
   const isGameOver = !data.map_data.length;
 
   return (
-    <main ref={mainRef} className="relative mx-auto my-auto max-w-[1200px]">
+    <main ref={mainRef} className="relative my-auto max-w-[1200px]">
       <img
         className="w-full cursor-pointer object-fill"
         onClick={handleMapClick}
