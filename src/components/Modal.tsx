@@ -98,7 +98,7 @@ function ModalForm({ finalTime, map_id, setData }: ModalFormProps) {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:3000/leaderboard', {
+      const res = await fetch(`${getUrl()}/leaderboard`, {
         mode: 'cors',
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
