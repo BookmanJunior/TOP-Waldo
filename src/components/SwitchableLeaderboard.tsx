@@ -21,9 +21,9 @@ export default function SwitchableLeaderboard() {
     });
 
   return (
-    <div className="mx-auto flex max-w-[400px] flex-col gap-4">
-      <div className="buttons mt-4 bg-black text-white">
-        <h2 className="py-1 text-center text-[1.3rem] font-bold">Leaderboard</h2>
+    <div>
+      <div className="buttons my-4 bg-black text-white">
+        <h2 className="px-4 py-2 text-[1.3rem] font-bold">Leaderboard</h2>
         {mapData.map((item) => (
           <button
             key={item.map_id}

@@ -3,10 +3,10 @@ import { MapPreviewProps } from '../types/MapPreview';
 
 export default function MapPreview({ img, map_id, title }: MapPreviewProps) {
   return (
-    <li className="group overflow-hidden rounded-md border-4 border-gray-400">
+    <li className="group overflow-hidden border-4 border-gray-400">
       <Link className="grid h-[300px]" to={`play/${map_id}`}>
         <img
-          className="col-start-1 row-start-1 h-[300px] w-[100%] object-cover object-top transition-[transform] group-hover:scale-110"
+          className="col-start-1 row-start-1 h-[inherit] w-[100%] object-cover object-top transition-[transform] group-hover:scale-110"
           src={img}
         />
         <p
