@@ -11,8 +11,6 @@ export default function SwitchableLeaderboard() {
   const { state, data, error } = FetchData<LeaderboardEntries[]>(`${getUrl()}/leaderboard`);
   const { mapData } = useRootData();
 
-  if (state === 'error') return <div>{error.message}</div>;
-
   const leaderboardToDisplay = data
     ?.filter((entry) => entry.map_id === currentLeaderboard)
     ?.filter((entry, i) => {
@@ -43,6 +41,8 @@ export default function SwitchableLeaderboard() {
       </div>
       {state === 'loading' ? (
         <Spinner />
+      ) : state === 'error' ? (
+        <div>{error.message}</div>
       ) : (
         <Leaderboard leaderboardData={leaderboardToDisplay} showCaption={false} />
       )}
