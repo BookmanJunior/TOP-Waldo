@@ -122,6 +122,7 @@ function ModalForm({ map_id, setData }: ModalFormProps) {
       const res = await fetch(`${getUrl()}/leaderboard`, {
         mode: 'cors',
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, map_id })
       });

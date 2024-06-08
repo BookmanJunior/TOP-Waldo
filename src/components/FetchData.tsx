@@ -16,7 +16,11 @@ export default function FetchData<T>(fetchUrl: string): FetchDataResult<T> {
 
   const fetchData = async () => {
     try {
-      const res = await fetch(fetchUrl);
+      const res = await fetch(fetchUrl, {
+        method: 'GET',
+        mode: 'cors',
+        credentials: 'include'
+      });
       const resResult = await res.json();
       if (res.status >= 400) {
         throw new Error(resResult.message);

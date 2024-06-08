@@ -89,6 +89,7 @@ export default function Map() {
       const res = await fetch(`${url}/marker/verify`, {
         mode: 'cors',
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ x: position.x, y: position.y, charName })
       });
