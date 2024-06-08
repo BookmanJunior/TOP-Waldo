@@ -73,6 +73,7 @@ interface ModalFormProps {
 
 interface ModalResponseErrors {
   name?: string;
+  message?: string;
   unexpectedError?: string;
 }
 
@@ -100,7 +101,7 @@ function ModalForm({ map_id, setData }: ModalFormProps) {
           Submit
         </button>
         <ErrorMessage
-          error={error?.name ?? error?.unexpectedError}
+          error={error?.name ?? error?.message ?? error?.unexpectedError}
           className="mt-1 font-semibold"
         />
       </form>
