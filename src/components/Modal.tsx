@@ -40,7 +40,7 @@ export function Modal({ isOpen, finalTime, map_id, handleRestart }: ModalProps) 
         Your final time is: <span className="font-bold">{FormatTime(finalTime)}</span>
       </p>
       {didMakeTop10 ? (
-        <ModalForm finalTime={finalTime} map_id={map_id} setData={setData} />
+        <ModalForm map_id={map_id} setData={setData} />
       ) : (
         <p>Can you make it to the top 10?</p>
       )}
@@ -67,19 +67,20 @@ export function Modal({ isOpen, finalTime, map_id, handleRestart }: ModalProps) 
 }
 
 interface ModalFormProps {
-  finalTime: number;
   map_id: number;
   setData: (data: LeaderboardEntries[]) => void;
 }
 
 interface ModalResponseErrors {
-  name: string;
+  name?: string;
+  unexpectedError?: string;
 }
 
-function ModalForm({ finalTime, map_id, setData }: ModalFormProps) {
+function ModalForm({ map_id, setData }: ModalFormProps) {
   const [name, setName] = useState('');
   const [submittedSuccessfully, setSubmittedSuccessfully] = useState(false);
   const [error, setError] = useState<ModalResponseErrors | null>(null);
+  const [loading, setLoading] = useState(false);
   return !submittedSuccessfully ? (
     <>
       <h2 className="font-semibold">You made the top 10!</h2>
@@ -91,9 +92,17 @@ function ModalForm({ finalTime, map_id, setData }: ModalFormProps) {
           placeholder="Enter your name"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          disabled={loading}
         />
-        <button className="rounded-sm bg-sky-700 px-4 py-[4px] text-white">Submit</button>
-        <ErrorMessage error={error?.name} className="mt-1 font-semibold" />
+        <button
+          disabled={loading}
+          className="rounded-sm bg-sky-700 px-4 py-[4px] text-white disabled:bg-gray-600">
+          Submit
+        </button>
+        <ErrorMessage
+          error={error?.name ?? error?.unexpectedError}
+          className="mt-1 font-semibold"
+        />
       </form>
     </>
   ) : (
@@ -102,12 +111,18 @@ function ModalForm({ finalTime, map_id, setData }: ModalFormProps) {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (name.trim().length < 2 || name.trim().length > 15) {
+      setError({ name: 'Name must be longer than 2 characters and less than 15 characters' });
+    }
+
+    setLoading(!loading);
     try {
       const res = await fetch(`${getUrl()}/leaderboard`, {
         mode: 'cors',
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ time: finalTime, name, map_id })
+        body: JSON.stringify({ name, map_id })
       });
       const resResult = await res.json();
 
@@ -120,8 +135,10 @@ function ModalForm({ finalTime, map_id, setData }: ModalFormProps) {
       setSubmittedSuccessfully(true);
     } catch (error) {
       if (error instanceof Error) {
-        console.log(error.message);
+        setError({ ...error, unexpectedError: error.message });
       }
+    } finally {
+      setLoading(!!loading);
     }
   }
 }
