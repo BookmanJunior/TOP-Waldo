@@ -5,6 +5,7 @@ import FormatTime from '../helpers/FormatTime';
 import { Link } from 'react-router-dom';
 import FetchData from './FetchData';
 import { LeaderboardEntries } from '../types/LeaderboardEntries';
+import ErrorMessage from './ErrorMessage';
 import getUrl from '../helpers/GetUrl';
 
 type ModalProps = {
@@ -33,7 +34,7 @@ export function Modal({ isOpen, finalTime, map_id, handleRestart }: ModalProps) 
   return createPortal(
     <dialog
       ref={modalRef}
-      className={`${isOpen ? 'flex' : ''} w-[min(400px,100%)] flex-col gap-4 rounded-md border border-gray-700 border-opacity-50 py-4 text-center`}>
+      className={`${isOpen ? 'flex' : ''} w-[min(400px,100%)] flex-col gap-4 rounded-md border border-gray-700 border-opacity-50 px-4 py-4 text-center`}>
       <h2 className="border-b pb-4 text-3xl font-bold">You did it!</h2>
       <p>
         Your final time is: <span className="font-bold">{FormatTime(finalTime)}</span>
@@ -43,15 +44,13 @@ export function Modal({ isOpen, finalTime, map_id, handleRestart }: ModalProps) 
       ) : (
         <p>Can you make it to the top 10?</p>
       )}
-      <div className="px-4">
-        {state === 'loading' ? (
-          <p>Loading Leaderboard</p>
-        ) : state === 'error' ? (
-          <p>{error.message}</p>
-        ) : (
-          <Leaderboard leaderboardData={data} />
-        )}
-      </div>
+      {state === 'loading' ? (
+        <p>Loading Leaderboard</p>
+      ) : state === 'error' ? (
+        <p>{error.message}</p>
+      ) : (
+        <Leaderboard leaderboardData={data} />
+      )}
       <div className="flex justify-center gap-2 border-t pt-4 text-sm">
         <button
           onClick={handleRestart}
@@ -73,12 +72,17 @@ interface ModalFormProps {
   setData: (data: LeaderboardEntries[]) => void;
 }
 
+interface ModalResponseErrors {
+  name: string;
+}
+
 function ModalForm({ finalTime, map_id, setData }: ModalFormProps) {
   const [name, setName] = useState('');
   const [submittedSuccessfully, setSubmittedSuccessfully] = useState(false);
+  const [error, setError] = useState<ModalResponseErrors | null>(null);
   return !submittedSuccessfully ? (
     <>
-      <h2>You made the top 10!</h2>
+      <h2 className="font-semibold">You made the top 10!</h2>
       <form onSubmit={handleSubmit}>
         <input
           className="mr-2 rounded-sm px-2 py-[4px] outline outline-1 outline-gray-300"
@@ -89,6 +93,7 @@ function ModalForm({ finalTime, map_id, setData }: ModalFormProps) {
           onChange={(e) => setName(e.target.value)}
         />
         <button className="rounded-sm bg-sky-700 px-4 py-[4px] text-white">Submit</button>
+        <ErrorMessage error={error?.name} className="mt-1 font-semibold" />
       </form>
     </>
   ) : (
@@ -107,7 +112,8 @@ function ModalForm({ finalTime, map_id, setData }: ModalFormProps) {
       const resResult = await res.json();
 
       if (res.status >= 400) {
-        throw new Error(resResult.message);
+        setError(resResult);
+        return;
       }
       setData(resResult);
       setName('');
