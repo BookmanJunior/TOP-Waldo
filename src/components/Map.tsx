@@ -1,18 +1,18 @@
-import { useRef, useState } from 'react';
-import Dropdown from './Dropdown';
-import DropdownOptions from './DropdownOptions';
-import Timer from './Timer';
-import { Modal } from './Modal';
-import FetchData from './FetchData';
-import { Map as MapProps } from '../types/Map';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import getUrl from '../helpers/GetUrl';
-import FoundCharactersMark from './FoundCharactersMark';
-import { Coordinates } from '../types/Coordinates';
-import Footer from './Footer';
 import fail from '../assets/fail.mp3';
 import success from '../assets/success.mp3';
+import getUrl from '../helpers/GetUrl';
+import { Coordinates } from '../types/Coordinates';
+import { Map as MapProps } from '../types/Map';
+import Dropdown from './Dropdown';
+import DropdownOptions from './DropdownOptions';
+import FetchData from './FetchData';
+import Footer from './Footer';
+import FoundCharactersMark from './FoundCharactersMark';
+import { Modal } from './Modal';
 import Spinner from './Spinner';
+import Timer from './Timer';
 
 const failAudio = new Audio(fail);
 const successAudio = new Audio(success);
@@ -22,11 +22,24 @@ export default function Map() {
   const [dropdown, setDropdown] = useState(false);
   const [finalTime, setFinalTime] = useState(0);
   const [foundPositions, setFoundPositions] = useState<Coordinates[]>([]);
+  const [guessOutcome, setGuessOutcome] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
   const mainRef = useRef<HTMLDivElement>(null);
   const { map_id } = useParams();
   const url = getUrl();
   const { state, data, error, setData, refetchData } = FetchData<MapProps>(`${url}/maps/${map_id}`);
+
+  useEffect(() => {
+    let timeOut: number;
+    if (guessOutcome) {
+      timeOut = setTimeout(() => {
+        setGuessOutcome(false);
+      }, 3000);
+    }
+    return () => {
+      clearTimeout(timeOut);
+    };
+  }, [guessOutcome]);
 
   if (state === 'loading') return <Spinner />;
 
@@ -57,11 +70,24 @@ export default function Map() {
         <Timer setFinalTime={setFinalTime} isGameOver={isGameOver} />
       </Footer>
       {foundPositions.length > 0 && <FoundCharactersMark foundPositions={foundPositions} />}
+      {guessOutcome && (
+        <div
+          style={{
+            top: `${position.y}%`,
+            left: `${position.x}%`
+          }}
+          className="pointer-events-none absolute bg-red-500 px-6 py-4 text-white">
+          Wrong Guess
+        </div>
+      )}
     </main>
   );
 
   function handleMapClick(e: React.MouseEvent) {
     if (!data?.map_data.length) return;
+    if (guessOutcome) {
+      setGuessOutcome(false);
+    }
 
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.nativeEvent.offsetX;
@@ -96,6 +122,7 @@ export default function Map() {
 
       if (res.status >= 400) {
         failAudio.play();
+        setGuessOutcome(true);
         return;
       }
 
