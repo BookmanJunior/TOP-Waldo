@@ -40,7 +40,7 @@ export default function SwitchableLeaderboard() {
         ))}
       </div>
       {state === 'loading' ? (
-        <Spinner />
+        <Spinner className="mx-auto" />
       ) : state === 'error' ? (
         <div>{error.message}</div>
       ) : (
