@@ -13,7 +13,7 @@ export default function Root() {
 
   if (state === 'loading') return <Spinner />;
 
-  if (error) return <div>{error.message}</div>;
+  if (state === 'error') throw error;
 
   return <Outlet context={{ mapData: data }} />;
 }

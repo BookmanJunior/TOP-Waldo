@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ErrorWithStatus } from '../types/ErrorWithStatus';
 
 type LoadState<T> =
   | { state: 'loading'; data?: undefined; error?: undefined }
@@ -23,7 +24,9 @@ export default function FetchData<T>(fetchUrl: string): FetchDataResult<T> {
       });
       const resResult = await res.json();
       if (res.status >= 400) {
-        throw new Error(resResult.message);
+        const err: ErrorWithStatus = new Error(resResult.message);
+        err.status = res.status;
+        throw err;
       }
       setLoadState({ state: 'loaded', data: resResult, error: undefined });
     } catch (error) {
