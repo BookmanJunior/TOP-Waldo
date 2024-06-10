@@ -43,7 +43,7 @@ export default function Map() {
 
   if (state === 'loading') return <Spinner />;
 
-  if (state === 'error') return <div>{error.message}</div>;
+  if (state === 'error') throw error;
 
   const isGameOver = !data.map_data.length;
 
