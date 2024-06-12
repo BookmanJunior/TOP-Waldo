@@ -9,11 +9,11 @@ export default function ErrorElement() {
   }
 
   if (error instanceof Error) {
-    if ('status' in error) {
-      return <ErrorBody status={(error as ErrorWithStatus).status} text={error.message} />;
-    } else {
-      return <ErrorBody status={500} text={error.message} />;
-    }
+    return 'status' in error ? (
+      <ErrorBody status={(error as ErrorWithStatus).status} text={error.message} />
+    ) : (
+      <ErrorBody status={500} text={error.message} />
+    );
   }
 }
 
