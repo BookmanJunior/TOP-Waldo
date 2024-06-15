@@ -13,10 +13,7 @@ export default function SwitchableLeaderboard() {
 
   const leaderboardToDisplay = data
     ?.filter((entry) => entry.map_id === currentLeaderboard)
-    ?.filter((entry, i) => {
-      if (i >= 10) return;
-      return entry;
-    });
+    .slice(0, 10);
 
   return (
     <div>
